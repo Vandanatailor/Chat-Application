@@ -1,21 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
     <LinearLayout
+        android:id="@+id/ln_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:background="@drawable/bg_card_curve"
+        android:orientation="horizontal"
+        android:padding="@dimen/_5sdp"
+        >
+<ImageView
+    android:layout_width="@dimen/_35sdp"
+    android:layout_height="@dimen/_30sdp"
+    android:src="@drawable/ic_search_"
+    android:layout_gravity="center"
+    />
+        <TextView
+            android:id="@+id/tv_login_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/josefinsans_semibold"
+            android:text="Search name here"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_13ssp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+          />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/_50sdp"
-        android:orientation="vertical"
+        android:layout_marginTop="@dimen/_15sdp"
         android:background="@drawable/img_bg"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:orientation="vertical"
+       >
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/user_list"
@@ -24,6 +55,16 @@
             android:layout_marginStart="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_20sdp"
             tools:listitem="@layout/list_users_" />
-    </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="@dimen/_10sdp"
+            android:src="@drawable/img_action_round"
+
+            />
+    </RelativeLayout>
+
+</LinearLayout>

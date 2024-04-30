@@ -1,4 +1,4 @@
-package com.example.chat_app_with_multimodule
+package com.example.chatapp
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
