@@ -15,6 +15,6 @@ class CommonMethods {
         }
     }
 }
-public interface onDataItemClickListner{
+public interface DataItemClickListner{
    public fun onItemClick(position :Int,type : String)
 }
