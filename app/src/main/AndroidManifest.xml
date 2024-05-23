@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 
     <application
+        android:name=".utils.BaseApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -16,13 +17,25 @@
         android:theme="@style/Theme.ChatAppWithMultiModule"
         tools:targetApi="31">
         <activity
-            android:name=".auth.SignUpActivity"
+            android:name=".ui.userflow.ChatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.auth.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.auth.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.userflow.UsersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.auth.SignUpActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".auth.LoginActivity"
+            android:name=".ui.auth.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

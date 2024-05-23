@@ -10,34 +10,49 @@
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:id="@+id/ln_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_10sdp"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:background="@drawable/bg_card_curve"
         android:orientation="horizontal"
-        android:padding="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_20sdp"
         >
-<ImageView
-    android:layout_width="@dimen/_35sdp"
-    android:layout_height="@dimen/_30sdp"
-    android:src="@drawable/ic_search_"
-    android:layout_gravity="center"
-    />
-        <TextView
-            android:id="@+id/tv_login_text"
+        <LinearLayout
+            android:id="@+id/ln_search"
+            android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/josefinsans_semibold"
-            android:text="Search name here"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_13ssp"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-          />
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:background="@drawable/bg_card_curve"
+            android:orientation="horizontal"
+            android:padding="@dimen/_5sdp"
+            >
+            <ImageView
 
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:src="@drawable/ic_search_"
+                android:layout_gravity="center_vertical"
+                />
+            <TextView
+                android:id="@+id/tv_login_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/josefinsans_semibold"
+                android:text="Search name here"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_13ssp"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                />
+
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/iv_CreateProfile"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:src="@drawable/img_panda_bear"
+            />
     </LinearLayout>
+
 
     <RelativeLayout
         android:id="@+id/linearLayout2"
@@ -63,6 +78,7 @@
             android:layout_alignParentBottom="true"
             android:layout_margin="@dimen/_10sdp"
             android:src="@drawable/img_action_round"
+            android:id="@+id/fb_button_"
 
             />
     </RelativeLayout>

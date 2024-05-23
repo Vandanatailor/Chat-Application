@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("com.google.gms.google-services")
+    id ("kotlin-kapt")
+    id ("com.google.dagger.hilt.android")
 }
 
 android {
@@ -40,6 +42,7 @@ android {
 
 }
 
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -55,15 +58,15 @@ dependencies {
     implementation (libs.circularimageview)
 
     //Dimen
-    implementation ("com.intuit.ssp:ssp-android:1.1.0")
-    implementation ("com.intuit.sdp:sdp-android:1.1.0")
+    implementation (libs.ssp.android)
+    implementation (libs.sdp.android)
 
-    implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
+    implementation(libs.firebase.bom)
 
    //implementation ("com.royrodriguez:transitionbutton:0.2.0")
 
     //realtimedatabase
-    implementation ("com.google.firebase:firebase-database:20.3.0")
+    implementation (libs.firebase.database)
     implementation ("com.google.firebase:firebase-analytics")
 
     //FireBaseAuth
@@ -71,6 +74,11 @@ dependencies {
 
     implementation ("com.firebaseui:firebase-ui-database:8.0.2")
 
+    implementation ("com.google.dagger:hilt-android:2.48")
+    kapt ("com.google.dagger:hilt-compiler:2.48")
 
 
+}
+kapt {
+    correctErrorTypes =true
 }

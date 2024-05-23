@@ -7,19 +7,25 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.chatapp.databinding.ListUsersBinding
+import com.example.chatapp.extra.onSelectItemClick
+import com.example.chatapp.model.User
 import com.example.chatapp.utils.DataItemClickListner
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 
-class AllUsersAdapter(
-    firebaseDataList: FirebaseRecyclerOptions<ContactDetails>,
-    private val context: Context,
-    private val onDataItemClickListner: DataItemClickListner,
-) : FirebaseRecyclerAdapter<ContactDetails,
-        AllUsersAdapter.ViewHolder>(firebaseDataList) {
+class AllUsersAdapter(private val dataList: List<User>,
+      private val selectItemClick: onSelectItemClick
+
+)
+    : RecyclerView.Adapter<AllUsersAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: ListUsersBinding)
-        : RecyclerView.ViewHolder(binding.root)
+           : RecyclerView.ViewHolder(binding.root){
+               fun bind(data : User){
+                   binding.tvUserName.text=data.userName
+               }
+           }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ListUsersBinding
@@ -30,10 +36,22 @@ class AllUsersAdapter(
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int, contactDetails: ContactDetails) {
-        holder.binding.tvUserName.text=contactDetails.name
-        Log.d("username", "onBindViewHolder: "+contactDetails.name)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(dataList[position])
+
+        holder.itemView.setOnClickListener {
+            if (holder.absoluteAdapterPosition != RecyclerView.NO_POSITION) {
+                selectItemClick.itemClick(
+                    holder.absoluteAdapterPosition,
+                    "Users"
+                )
+            }
+        }
+
 
     }
 
+    override fun getItemCount(): Int {
+        return dataList.size
+    }
 }
