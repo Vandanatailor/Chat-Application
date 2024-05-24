@@ -84,12 +84,9 @@ class UsersActivity : AppCompatActivity() ,DataItemClickListner,onSelectItemClic
 
     }
 
-    override fun itemClick(position: Int, type: String) {
-         if(type=="Users"){
+    override fun itemClick(position: Int, uid: String) {
              startActivity(
                  Intent(this@UsersActivity,
-                 ChatActivity::class.java)
-             )
-         }
+                 ChatActivity::class.java).putExtra("UserId",uid))
     }
 }

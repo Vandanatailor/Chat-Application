@@ -9,3 +9,8 @@ data class User(
     var userName : String ="",
     var email : String=""
 )
+data class ChatMessage(
+    val message: String = "",
+    val senderId: String = "",
+    val timestamp: Long = System.currentTimeMillis()
+)
