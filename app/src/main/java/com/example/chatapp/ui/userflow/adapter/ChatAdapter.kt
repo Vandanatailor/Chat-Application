@@ -39,7 +39,7 @@ class ChatAdapter(private val chatList : List<ChatMessage>,
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-//        holder.bind(dataList[position])
+           holder.bind(chatList[position])
 //
 //        holder.itemView.setOnClickListener {
 //            if (holder.absoluteAdapterPosition != RecyclerView.NO_POSITION) {
@@ -54,6 +54,6 @@ class ChatAdapter(private val chatList : List<ChatMessage>,
     }
 
     override fun getItemCount(): Int {
-        return 4
+        return chatList.size
     }
 }

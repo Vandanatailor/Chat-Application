@@ -12,5 +12,10 @@ data class User(
 data class ChatMessage(
     val message: String = "",
     val senderId: String = "",
+    val receiverId: String = "",
     val timestamp: Long = System.currentTimeMillis()
+)
+data class ChatRoom(
+    val chatRoomId: String = "",
+    val users: List<String> = listOf()
 )

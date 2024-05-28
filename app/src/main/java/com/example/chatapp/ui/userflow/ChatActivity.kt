@@ -8,12 +8,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.chatapp.R
 import com.example.chatapp.adapter.AllUsersAdapter
 import com.example.chatapp.databinding.ActivityChatBinding
 import com.example.chatapp.model.ChatMessage
 import com.example.chatapp.model.User
+import com.example.chatapp.ui.userflow.adapter.MessageAdapter
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -25,77 +28,78 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var binding : ActivityChatBinding
     private lateinit var database: FirebaseDatabase
     private lateinit var chatReference: DatabaseReference
+    private lateinit var messageAdapter: MessageAdapter
+    private lateinit var messageList: MutableList<ChatMessage>
+    private lateinit var chatRoomId: String
+    private lateinit var currentUserId: String
+    private lateinit var receiverUserId: String
+    private lateinit var linearLayoutManager: LinearLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding=ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        database = FirebaseDatabase.getInstance()
-        chatReference = database.getReference("chats")
-        var UserId = intent.getStringExtra("UserId")
-        Log.d("gghhfgjh", "onCreate: "+UserId)
 
-        startRealtimeUpdates()
+
+        database = FirebaseDatabase.getInstance()
+        currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        chatRoomId = intent.getStringExtra("chatRoomId") ?: ""
+        receiverUserId = intent.getStringExtra("UserId") ?: ""
+
+        chatReference = database.getReference("chats").child(chatRoomId)
+
+
+        messageList = mutableListOf()
+        messageAdapter = MessageAdapter(messageList)
+        binding.rvChatData.adapter = messageAdapter
+        binding.rvChatData.layoutManager = LinearLayoutManager(this)
         onClickEvent()
+        listenForMessages()
 
     }
-    private fun onClickEvent(){
+    private fun onClickEvent() {
         binding.imgSend.setOnClickListener {
             val message = binding.edtMsg.text.toString().trim()
             if (message.isNotEmpty()) {
-                val senderId = "123" // Replace with actual sender ID
-                sendMessage(message, senderId)
+                sendMessage(message)
                 binding.edtMsg.text.clear()
             }
         }
     }
-    private fun sendMessage(message: String, senderId: String) {
-        // Create a map representing the chat message
-        val chatMessage = mapOf(
-            "message" to message,
-            "senderId" to senderId,
-            "timestamp" to System.currentTimeMillis() // Include a timestamp for sorting
+
+    private fun sendMessage(message: String) {
+        val chatMessage = ChatMessage(
+            message = message,
+            senderId = currentUserId,
+            receiverId = receiverUserId,
+            timestamp = System.currentTimeMillis()
         )
 
-        val messageId = chatReference.push().key
-        chatReference.child(messageId ?: "").setValue(chatMessage)
+        chatReference.push().setValue(chatMessage)
             .addOnSuccessListener {
-                Log.d("Yesss", "sendMessage: ")
+                Log.d("ChatActivity", "Message sent successfully")
             }
             .addOnFailureListener { e ->
-                // Handle failure: Log the error message
-                println("Error sending message: $e")
+                Log.e("ChatActivity", "Error sending message", e)
             }
     }
-
-    private fun startRealtimeUpdates() {
+    private fun listenForMessages() {
+//        linearLayoutManager= LinearLayoutManager(this,RecyclerView.VERTICAL,true)
+//        binding.rvChatData.layoutManager=linearLayoutManager
         chatReference.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                // A new message has been added
-                val chatMessage = snapshot.getValue(ChatMessage::class.java)
-                // Handle the new message
-                if (chatMessage != null) {
-                    // Update your UI or perform any other actions with the new message
+                val message = snapshot.getValue(ChatMessage::class.java)
+                if (message != null) {
+                    messageList.add(message)
+                    messageAdapter.notifyItemInserted(messageList.size - 1)
+                  //  binding.rvChatData.adapter=messageAdapter
+                    binding.rvChatData.scrollToPosition(messageList.size - 1)
                 }
             }
-
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                // Handle changes to existing messages if needed
-            }
-
-            override fun onChildRemoved(snapshot: DataSnapshot) {
-                // Handle message removal if needed
-            }
-
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                // Handle message movement if needed
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                // Handle database errors if needed
-            }
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
+            override fun onChildRemoved(snapshot: DataSnapshot) {}
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+            override fun onCancelled(error: DatabaseError) {}
         })
     }
-
-
 }

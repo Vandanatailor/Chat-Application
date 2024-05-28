@@ -47,8 +47,6 @@ class AllUsersAdapter(private val dataList: List<User>,
                 )
             }
         }
-
-
     }
 
     override fun getItemCount(): Int {

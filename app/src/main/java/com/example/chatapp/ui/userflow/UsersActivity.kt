@@ -10,10 +10,12 @@ import com.example.chatapp.MainActivity
 import com.example.chatapp.adapter.AllUsersAdapter
 import com.example.chatapp.databinding.ActivityUsersBinding
 import com.example.chatapp.extra.onSelectItemClick
+import com.example.chatapp.model.ChatRoom
 import com.example.chatapp.model.ContactDetails
 import com.example.chatapp.model.User
 import com.example.chatapp.utils.DataItemClickListner
 import com.firebase.ui.database.FirebaseRecyclerOptions
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -23,46 +25,31 @@ import com.google.firebase.database.ValueEventListener
 class UsersActivity : AppCompatActivity() ,DataItemClickListner,onSelectItemClick{
     private lateinit var binding: ActivityUsersBinding
     private lateinit var allUsersAdapter: AllUsersAdapter
-   /// private lateinit var databaseReference: DatabaseReference
+    private lateinit var currentUser: User
+    private lateinit var database : FirebaseDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityUsersBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        databaseReference = FirebaseDatabase.getInstance().
-//        getReference().child("SignUp")
-        allUserListShow()
+         database = FirebaseDatabase.getInstance()
+
+        currentUser=FirebaseAuth.getInstance().currentUser?.let {
+            User(it.uid,it.displayName ?:" ",it.email ?:" ")
+        }?:return
+
         listOfUsersCall()
     }
 
-    private fun allUserListShow(){
-   //     val options: FirebaseRecyclerOptions<ContactDetails>
-//        = FirebaseRecyclerOptions.Builder<ContactDetails>()
-//            .setQuery(databaseReference, ContactDetails::class.java)
-//            .build()
-//        val options = FirebaseRecyclerOptions.Builder<ContactDetails>()
-//            .setQuery(databaseReference, ContactDetails::class.java)
-//            .build()
-//        Log.d("gfgfgfgfgfg", "allUserListShow: "+options)
-//        allUsersAdapter = AllUsersAdapter(options, this, this)
-//        binding.rvUsers.adapter = allUsersAdapter
-//        binding.rvUsers.layoutManager = LinearLayoutManager(
-//            this,
-//            RecyclerView.VERTICAL, false
-//        )
-    }
 
     override fun onItemClick(position: Int, type: String) {
         TODO("Not yet implemented")
     }
-
     private fun listOfUsersCall(){
-      val database = FirebaseDatabase.getInstance()
-        val dataList = mutableListOf<User>()
 
-      //  val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-        val adapter = AllUsersAdapter(dataList,this)
-        binding.rvUsers.adapter = adapter
+        val dataList = mutableListOf<User>()
+         allUsersAdapter = AllUsersAdapter(dataList,this)
+        binding.rvUsers.adapter = allUsersAdapter
         binding.rvUsers.layoutManager = LinearLayoutManager(this)
         val databaseReference = database.getReference("users")
         databaseReference.addValueEventListener(object : ValueEventListener {
@@ -74,19 +61,26 @@ class UsersActivity : AppCompatActivity() ,DataItemClickListner,onSelectItemClic
                         dataList.add(data)
                     }
                 }
-                adapter.notifyDataSetChanged()
+                allUsersAdapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Log.w("Firebase", "Failed to read value.", error.toException())
             }
         })
-
     }
 
     override fun itemClick(position: Int, uid: String) {
+        val chatRoomId = createChatRoomId(currentUser.uid, uid)
              startActivity(
                  Intent(this@UsersActivity,
-                 ChatActivity::class.java).putExtra("UserId",uid))
+                 ChatActivity::class.java)
+                     .putExtra("chatRoomId", chatRoomId)
+                     .putExtra("UserId",uid))
+    }
+
+    private fun createChatRoomId(user1: String, user2: String): String {
+        val sortedIds = listOf(user1, user2).sorted()
+        return sortedIds.joinToString("_")
     }
 }
