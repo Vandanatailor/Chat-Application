@@ -2,9 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="custom">#E6FAFAFA</color>
     <color name="gray">#E5E7E9</color>
     <color name="slate_blue">#5D6D7E</color>
     <color name="dark_slate_blue">#34495E</color>
     <color name="grayish_blue">#7F8C8D </color>
     <color name="grayish_dark">#707B7C</color>
+    <color name="clr_gry">#646464</color>
 </resources>

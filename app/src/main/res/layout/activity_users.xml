@@ -8,6 +8,7 @@
     android:orientation="vertical"
     tools:context=".ui.userflow.UsersActivity">
     <LinearLayout
+        android:elevation="@dimen/_1ssp"
         android:id="@+id/ln_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

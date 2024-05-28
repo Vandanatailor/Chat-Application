@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.chatapp.MainActivity
 import com.example.chatapp.databinding.ActivityLoginBinding
 import com.example.chatapp.model.ContactDetails
+import com.example.chatapp.model.User
 import com.example.chatapp.utils.AppSession
 import com.example.chatapp.utils.CommanFunction
 import com.example.chatapp.utils.CommonMethods
@@ -22,15 +23,11 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-
-
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var emailPasswordList: MutableList<Pair<String, String>>
     private lateinit var binding: ActivityLoginBinding
     private lateinit var fireBaseAuth: FirebaseAuth
-    private lateinit var usemail: String
-    private lateinit var usPassword: String
     private lateinit var database: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +38,6 @@ class LoginActivity : AppCompatActivity() {
         database = FirebaseDatabase.getInstance().reference
         signUp()
         emailPasswordList = mutableListOf()
-        //   readDataFromRealTime()
         onClickEvents()
 
     }
@@ -49,18 +45,15 @@ class LoginActivity : AppCompatActivity() {
         binding.tvSubmit.setOnClickListener {
             val email = binding.emailEt.text.toString()
             val password = binding.passwordEt.text.toString()
-
             if (isValidaton()) {
-                // Authenticate user using Firebase Authentication
+                addProfile(binding.tvUserName.text.toString())
                 fireBaseAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
-                            // Sign in success, navigate to MainActivity
                             val intent = Intent(this, MainActivity::class.java)
                             startActivity(intent)
-                            finish() // Finish LoginActivity to prevent going back
+                            finish()
                         } else {
-                            // If sign in fails, display a message to the user.
                             Toast.makeText(
                                 baseContext, "Authentication failed.",
                                 Toast.LENGTH_SHORT
@@ -70,60 +63,33 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
-
-//    private fun onClickEvents() {
-//        binding.tvSubmit.setOnClickListener {
-//            val email = binding.emailEt.text.toString()
-//            val password = binding.passwordEt.text.toString()
-//            Log.d("printHere", "onCreate: " + usPassword + " " + usemail);
-//            if (isValidaton()) {
-//                if (emailPasswordList.any { it.first == email && it.second == password }) {
-//                    Toast.makeText(this, "Login SuccessFully", Toast.LENGTH_SHORT).show()
-//                    val intent = Intent(
-//                        this, MainActivity::class.java
-//                    )
-//                    startActivity(intent)
-//                } else {
-//                    Toast.makeText(this, "Incorrect email or password", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//        }
-//    }
-
-//    private fun readDataFromRealTime() {
-//        val databaseReference = FirebaseDatabase.getInstance()
-//            .getReference("SignUp")
-//        val valueEventListener = object : ValueEventListener {
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                for (snapshot in dataSnapshot.children) {
-//                    usemail = snapshot.child("email")
-//                        .getValue(String::class.java).toString()
-//                    usPassword = snapshot.child("password")
-//                        .getValue(String::class.java).toString()
-//                    emailPasswordList.add(Pair(usemail, usPassword))
-//                    Log.d("dataUpdation", "onDataChange: " + usemail + " " + usPassword)
-//                }
-//            }
-//
-//            override fun onCancelled(databaseError: DatabaseError) {
-//                Log.d(
-//                    "DataReadError",
-//                    "Failed to read data from database: ${databaseError.message}"
-//                )
-//            }
-//        }
-//        databaseReference.addListenerForSingleValueEvent(valueEventListener)
-//    }
-
+    private fun addProfile( userName: String) {
+        val userId = fireBaseAuth.currentUser?.uid
+        database = FirebaseDatabase.getInstance().getReference("users")
+        if (userId != null) {
+            val user = User(userId, userName)
+            database.child(userId).setValue(user)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d("SuccessFullyEnter", "addProfile: ")
+                    } else {
+                        Toast.makeText(this, "Failed to save user data",
+                            Toast.LENGTH_SHORT).show()
+                    }
+                }
+        }
+    }
     private fun signUp() {
         binding.clickForSignIn.setOnClickListener(View.OnClickListener {
             intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         })
     }
-
     private fun isValidaton(): Boolean {
-        if (binding.emailEt.text.toString().isEmpty()) {
+        if (binding.tvUserName.text.toString().isEmpty()) {
+            CommanFunction.showToast(this, "Please Enter User Name")
+            return false
+        }else if (binding.emailEt.text.toString().isEmpty()) {
             CommanFunction.showToast(this, "Please Enter Your Email")
             return false
         } else if (!CommonMethods.emailValidation(binding.emailEt.text.toString())
@@ -133,7 +99,8 @@ class LoginActivity : AppCompatActivity() {
         } else if (binding.passwordEt.text.toString().isEmpty()) {
             CommanFunction.showToast(this, "Please Enter Password")
             return false
-        } else {
+        }
+        else {
             return true
         }
     }

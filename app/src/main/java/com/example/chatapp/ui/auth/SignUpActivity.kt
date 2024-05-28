@@ -50,36 +50,8 @@ class SignUpActivity : AppCompatActivity() {
             }
         }
 
-//        binding.tvSubmit.setOnClickListener(
-//            View.OnClickListener {
-//                if (isValidaton()) {
-//                    singUpWithRealTime(
-//                        binding.usernameEt.text.toString(),
-//                        binding.emailEt.text.toString(),
-//                        binding.passwordEt.text.toString()
-//                    )
-//                }
-//
-//            }
-//        )
     }
 
-//    private fun singUpWithRealTime(name: String, email: String, password: String) {
-//
-//        contactDetails = ContactDetails(name, email, password);
-//        FirebaseDatabase.getInstance().getReference()
-//            .child("SignUp")
-//            .push().setValue(contactDetails)
-//            .addOnSuccessListener {
-//                intent = Intent(this,LoginActivity::class.java)
-//                startActivity(intent)
-//                Log.d("Successs", "singUpWithRealTime: ")
-//
-//            }.addOnFailureListener { exception ->
-//                Log.d("failureFailure", "singUpWithRealTime: " + exception)
-//                Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
-//            }
-//    }
 
 
     private fun signUpWithEmailPassword(name: String, email: String, password: String) {

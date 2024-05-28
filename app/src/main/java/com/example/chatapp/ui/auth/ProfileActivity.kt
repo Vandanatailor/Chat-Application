@@ -32,14 +32,14 @@ class ProfileActivity : AppCompatActivity() {
         binding.tvSubmit.setOnClickListener{
            val name = binding.tvUserName.text.toString()
            val email= binding.tvEmail.text.toString()
-            addProfile(name,email)
+            addProfile(name)
         }
     }
 
-        private fun addProfile( userName: String, email: String) {
+        private fun addProfile( userName: String) {
             val userId = mAuth.currentUser?.uid
             if (userId != null) {
-                val user = User(userId, userName, email)
+                val user = User(userId, userName)
                 mDatabase.child(userId).setValue(user)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {

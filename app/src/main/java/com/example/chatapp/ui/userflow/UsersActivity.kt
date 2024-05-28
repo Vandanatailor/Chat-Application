@@ -35,7 +35,7 @@ class UsersActivity : AppCompatActivity() ,DataItemClickListner,onSelectItemClic
          database = FirebaseDatabase.getInstance()
 
         currentUser=FirebaseAuth.getInstance().currentUser?.let {
-            User(it.uid,it.displayName ?:" ",it.email ?:" ")
+            User(it.uid,it.displayName ?:" ")
         }?:return
 
         listOfUsersCall()

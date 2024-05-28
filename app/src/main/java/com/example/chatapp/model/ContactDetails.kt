@@ -7,7 +7,6 @@ data class ContactDetails (
 data class User(
     var uid : String="",
     var userName : String ="",
-    var email : String=""
 )
 data class ChatMessage(
     val message: String = "",
