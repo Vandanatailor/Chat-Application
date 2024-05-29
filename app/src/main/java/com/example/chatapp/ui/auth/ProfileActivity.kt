@@ -11,6 +11,7 @@ import com.example.chatapp.MainActivity
 import com.example.chatapp.R
 import com.example.chatapp.databinding.ActivityProfileBinding
 import com.example.chatapp.model.User
+import com.example.chatapp.utils.CommanFunction
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -31,21 +32,19 @@ class ProfileActivity : AppCompatActivity() {
     private fun onClickHandler(){
         binding.tvSubmit.setOnClickListener{
            val name = binding.tvUserName.text.toString()
-           val email= binding.tvEmail.text.toString()
-            addProfile(name)
+           val about= binding.tvAbout.text.toString()
+            addProfile(name,about)
         }
     }
 
-        private fun addProfile( userName: String) {
+        private fun addProfile( userName: String,about : String) {
             val userId = mAuth.currentUser?.uid
             if (userId != null) {
-                val user = User(userId, userName)
+                val user = User(userId, userName,about)
                 mDatabase.child(userId).setValue(user)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            startActivity(Intent(this@ProfileActivity,
-                                MainActivity::class.java))
-
+                           CommanFunction.showToast(this@ProfileActivity,"Successfully changed")
                         } else {
                             Toast.makeText(this, "Failed to save user data",
                                 Toast.LENGTH_SHORT).show()

@@ -2,9 +2,10 @@
     <string name="app_name">Chat-App-With-MultiModule</string>
     <string name="anchal_jaaju">Anchal Jaaju</string>
     <string name="msgg">How are you?</string>
-    <string name="profile_page">Profile Page</string>
+    <string name="profile_page">Edit Profile</string>
     <string name="user_name">User Name</string>
     <string name="email">Email</string>
     <string name="submit">Submit</string>
     <string name="sign_up">Sign Up</string>
+    <string name="about">About</string>
 </resources>

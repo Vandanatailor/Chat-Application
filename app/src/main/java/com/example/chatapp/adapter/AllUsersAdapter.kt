@@ -23,6 +23,7 @@ class AllUsersAdapter(private val dataList: List<User>,
            : RecyclerView.ViewHolder(binding.root){
                fun bind(data : User){
                    binding.tvUserName.text=data.userName
+                   binding.tvAbout.text=data.about
                }
            }
 

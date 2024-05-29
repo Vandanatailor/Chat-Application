@@ -10,9 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.chatapp.BaseActivity
+import com.example.chatapp.MainActivity
 import com.example.chatapp.R
 import com.example.chatapp.databinding.ActivitySignUpBinding
 import com.example.chatapp.model.ContactDetails
+import com.example.chatapp.model.User
 import com.example.chatapp.utils.CommanFunction
 import com.example.chatapp.utils.CommonMethods
 import com.google.firebase.FirebaseApp
@@ -35,34 +37,46 @@ class SignUpActivity : AppCompatActivity() {
 
         FirebaseApp.initializeApp(this);
         fireBaseAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance().getReference("users")
         onClickEvents()
 
     }
 
     private fun onClickEvents() {
         binding.tvSubmit.setOnClickListener {
-            val name = binding.usernameEt.text.toString()
-            val email = binding.emailEt.text.toString()
-            val password = binding.passwordEt.text.toString()
+//            val name =
+//            val email =
+//            val password =
 
             if (isValidaton()) {
-                signUpWithEmailPassword(name, email, password)
+                addProfile( binding.usernameEt.text.toString())
+                signUpWithEmailPassword(binding.emailEt.text.toString(), binding.passwordEt.text.toString())
             }
         }
-
     }
-
-
-
-    private fun signUpWithEmailPassword(name: String, email: String, password: String) {
+    private fun addProfile( userName: String) {
+        val userId = fireBaseAuth.currentUser?.uid
+        if (userId != null) {
+            val user = User(userId, userName)
+            database.child(userId).setValue(user)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d("SuccessFullyEnter", "addProfile: ")
+                    } else {
+                        Log.d("SuccessFullyEnter", "addProfile:111111 ")
+                        Toast.makeText(this, "Failed to save user data",
+                            Toast.LENGTH_SHORT).show()
+                    }
+                }
+        }
+    }
+    private fun signUpWithEmailPassword(email: String, password: String) {
         fireBaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Sign up success, navigate to LoginActivity
                     startActivity(Intent(this, LoginActivity::class.java))
-                    finish() // Finish SignUpActivity to prevent going back
+                    finish()
                 } else {
-                    // If sign up fails, display a message to the user.
                     Toast.makeText(
                         baseContext, "Sign up failed. ${task.exception?.message}",
                         Toast.LENGTH_SHORT
@@ -71,7 +85,7 @@ class SignUpActivity : AppCompatActivity() {
             }
     }
     private fun isValidaton(): Boolean {
-        if (binding.usernameEt.text.toString().isEmpty() && binding.usernameEt.text == null) {
+        if (binding.usernameEt.text.toString().isEmpty() ) {
             CommanFunction.showToast(this,"Please Enter Your Name")
             return false
         } else if (binding.emailEt.text.toString().isEmpty()
