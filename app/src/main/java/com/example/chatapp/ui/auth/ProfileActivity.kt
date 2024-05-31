@@ -31,26 +31,26 @@ class ProfileActivity : AppCompatActivity() {
     }
     private fun onClickHandler(){
         binding.tvSubmit.setOnClickListener{
-           val name = binding.tvUserName.text.toString()
-           val about= binding.tvAbout.text.toString()
+            val name = binding.tvUserName.text.toString()
+            val about= binding.tvAbout.text.toString()
             addProfile(name,about)
         }
     }
 
-        private fun addProfile( userName: String,about : String) {
-            val userId = mAuth.currentUser?.uid
-            if (userId != null) {
-                val user = User(userId, userName,about)
-                mDatabase.child(userId).setValue(user)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                           CommanFunction.showToast(this@ProfileActivity,"Successfully changed")
-                        } else {
-                            Toast.makeText(this, "Failed to save user data",
-                                Toast.LENGTH_SHORT).show()
-                        }
+    private fun addProfile( userName: String,about : String) {
+        val userId = mAuth.currentUser?.uid
+        if (userId != null) {
+            val user = User(userId, userName,about)
+            mDatabase.child(userId).setValue(user)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        CommanFunction.showToast(this@ProfileActivity,"Successfully changed")
+                    } else {
+                        Toast.makeText(this, "Failed to save user data",
+                            Toast.LENGTH_SHORT).show()
                     }
-            }
+                }
+        }
     }
 
 }

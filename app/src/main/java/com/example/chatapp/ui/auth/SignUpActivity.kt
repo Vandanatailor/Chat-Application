@@ -24,7 +24,6 @@ import com.google.firebase.database.FirebaseDatabase
 
 class SignUpActivity : AppCompatActivity() {
 
-    private lateinit var contactDetails: ContactDetails
     private lateinit var fireBaseAuth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private lateinit var binding: ActivitySignUpBinding
@@ -34,9 +33,8 @@ class SignUpActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         FirebaseApp.initializeApp(this);
-        fireBaseAuth = FirebaseAuth.getInstance();
+        fireBaseAuth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().getReference("users")
         onClickEvents()
 
@@ -44,38 +42,59 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun onClickEvents() {
         binding.tvSubmit.setOnClickListener {
-//            val name =
-//            val email =
-//            val password =
 
             if (isValidaton()) {
-                addProfile( binding.usernameEt.text.toString())
-                signUpWithEmailPassword(binding.emailEt.text.toString(), binding.passwordEt.text.toString())
+                signUpWithEmailPassword(
+                    binding.emailEt.text.toString(),
+                    binding.passwordEt.text.toString()
+                )
+
             }
+
+            if(binding.lnUserName.visibility==View.VISIBLE)
+            {
+                if (binding.usernameEt.text.toString().isEmpty() ) {
+                    CommanFunction.showToast(this,"Please Enter Your Name")
+                }else{
+                    Log.d("chaljana222", "addProfile: ")
+                    addProfile(binding.usernameEt.text.toString())
+                }
+
+            }
+
         }
+
+
     }
-    private fun addProfile( userName: String) {
+
+    private fun addProfile(userName: String) {
+        Log.d("chaljana111", "addProfile: ")
         val userId = fireBaseAuth.currentUser?.uid
         if (userId != null) {
-            val user = User(userId, userName)
+            val user = User(userId, userName, "")
             database.child(userId).setValue(user)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Log.d("SuccessFullyEnter", "addProfile: ")
+                        Log.d("chaljana333", "addProfile: ")
+                        startActivity(Intent(this, LoginActivity::class.java))
+                        finish()
                     } else {
-                        Log.d("SuccessFullyEnter", "addProfile:111111 ")
-                        Toast.makeText(this, "Failed to save user data",
-                            Toast.LENGTH_SHORT).show()
+                        Log.d("chaljana444 ", "addProfile: ")
+                        Toast.makeText(
+                            this, "Failed to save user data",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
         }
     }
+
     private fun signUpWithEmailPassword(email: String, password: String) {
         fireBaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    startActivity(Intent(this, LoginActivity::class.java))
-                    finish()
+                    binding.lnSignUp.visibility = View.GONE
+                    binding.lnUserName.visibility = View.VISIBLE
                 } else {
                     Toast.makeText(
                         baseContext, "Sign up failed. ${task.exception?.message}",
@@ -84,25 +103,21 @@ class SignUpActivity : AppCompatActivity() {
                 }
             }
     }
+
     private fun isValidaton(): Boolean {
-        if (binding.usernameEt.text.toString().isEmpty() ) {
-            CommanFunction.showToast(this,"Please Enter Your Name")
-            return false
-        } else if (binding.emailEt.text.toString().isEmpty()
+        if (binding.emailEt.text.toString().isEmpty()
         ) {
-            CommanFunction.showToast(this,"Please Enter Your Email")
+            CommanFunction.showToast(this, "Please Enter Your Email")
             return false
         } else if (!CommonMethods.emailValidation(binding.emailEt.text.toString())
         ) {
-            CommanFunction.showToast(this,"Please Enter Valid email")
+            CommanFunction.showToast(this, "Please Enter Valid email")
             return false
         } else if (binding.passwordEt.text.toString().isEmpty()) {
-            CommanFunction.showToast(this,"Please Enter Password")
+            CommanFunction.showToast(this, "Please Enter Password")
             return false
-        }
-        else{
+        } else {
             return true
         }
     }
-
 }

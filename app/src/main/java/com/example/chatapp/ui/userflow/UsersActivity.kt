@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.chatapp.MainActivity
 import com.example.chatapp.adapter.AllUsersAdapter
 import com.example.chatapp.databinding.ActivityUsersBinding
+import com.example.chatapp.extra.Constants
 import com.example.chatapp.extra.onSelectItemClick
 import com.example.chatapp.model.ChatRoom
 import com.example.chatapp.model.ContactDetails
@@ -27,7 +28,7 @@ class UsersActivity : AppCompatActivity() ,DataItemClickListner,onSelectItemClic
     private lateinit var allUsersAdapter: AllUsersAdapter
     private lateinit var currentUser: User
     private lateinit var database : FirebaseDatabase
-
+    val dataList = mutableListOf<User>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityUsersBinding.inflate(layoutInflater)
@@ -39,6 +40,7 @@ class UsersActivity : AppCompatActivity() ,DataItemClickListner,onSelectItemClic
         }?:return
 
         listOfUsersCall()
+
     }
 
 
@@ -46,8 +48,6 @@ class UsersActivity : AppCompatActivity() ,DataItemClickListner,onSelectItemClic
         TODO("Not yet implemented")
     }
     private fun listOfUsersCall(){
-
-        val dataList = mutableListOf<User>()
          allUsersAdapter = AllUsersAdapter(dataList,this)
         binding.rvUsers.adapter = allUsersAdapter
         binding.rvUsers.layoutManager = LinearLayoutManager(this)
@@ -76,7 +76,10 @@ class UsersActivity : AppCompatActivity() ,DataItemClickListner,onSelectItemClic
                  Intent(this@UsersActivity,
                  ChatActivity::class.java)
                      .putExtra("chatRoomId", chatRoomId)
-                     .putExtra("UserId",uid))
+                     .putExtra("UserId",uid)
+                     .putExtra(Constants.userName,dataList.get(position).userName)
+                     .putExtra(Constants.userAbout,dataList.get(position).about)
+             )
     }
 
     private fun createChatRoomId(user1: String, user2: String): String {

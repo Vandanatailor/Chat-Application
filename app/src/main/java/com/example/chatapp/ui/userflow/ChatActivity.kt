@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.chatapp.R
 import com.example.chatapp.adapter.AllUsersAdapter
 import com.example.chatapp.databinding.ActivityChatBinding
+import com.example.chatapp.extra.Constants
 import com.example.chatapp.model.ChatMessage
 import com.example.chatapp.model.User
 import com.example.chatapp.ui.userflow.adapter.MessageAdapter
@@ -33,30 +34,42 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var chatRoomId: String
     private lateinit var currentUserId: String
     private lateinit var receiverUserId: String
-    private lateinit var linearLayoutManager: LinearLayoutManager
-
+    private lateinit var userName :String
+    private lateinit var usersAbout :String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding=ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         database = FirebaseDatabase.getInstance()
         currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
         chatRoomId = intent.getStringExtra("chatRoomId") ?: ""
         receiverUserId = intent.getStringExtra("UserId") ?: ""
-
         chatReference = database.getReference("chats").child(chatRoomId)
 
+        setAdapter()
+        onClickEvent()
+        headingData()
+        listenForMessages()
 
+    }
+    private fun setAdapter(){
         messageList = mutableListOf()
         messageAdapter = MessageAdapter(messageList)
         binding.rvChatData.adapter = messageAdapter
         binding.rvChatData.layoutManager = LinearLayoutManager(this)
-        onClickEvent()
-        listenForMessages()
-
     }
+    private fun headingData(){
+        userName = intent.getStringExtra(Constants.userName) ?: ""
+        usersAbout = intent.getStringExtra(Constants.userAbout) ?: ""
+        binding.tvUserName.text=userName
+        binding.tvAbout.text=usersAbout
+
+        binding.ivBack.setOnClickListener {
+            finish()
+        }
+    }
+
     private fun onClickEvent() {
         binding.imgSend.setOnClickListener {
             val message = binding.edtMsg.text.toString().trim()
@@ -84,15 +97,12 @@ class ChatActivity : AppCompatActivity() {
             }
     }
     private fun listenForMessages() {
-//        linearLayoutManager= LinearLayoutManager(this,RecyclerView.VERTICAL,true)
-//        binding.rvChatData.layoutManager=linearLayoutManager
         chatReference.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val message = snapshot.getValue(ChatMessage::class.java)
                 if (message != null) {
                     messageList.add(message)
                     messageAdapter.notifyItemInserted(messageList.size - 1)
-                  //  binding.rvChatData.adapter=messageAdapter
                     binding.rvChatData.scrollToPosition(messageList.size - 1)
                 }
             }
@@ -102,4 +112,5 @@ class ChatActivity : AppCompatActivity() {
             override fun onCancelled(error: DatabaseError) {}
         })
     }
+
 }
