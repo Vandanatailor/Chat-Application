@@ -9,4 +9,6 @@
     <color name="grayish_blue">#7F8C8D </color>
     <color name="grayish_dark">#707B7C</color>
     <color name="clr_gry">#646464</color>
+    <color name="active_green">#3BA575</color>
+    <color name="pink">#9B7798</color>
 </resources>

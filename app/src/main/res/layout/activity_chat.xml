@@ -5,53 +5,116 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray"
+    android:background="@drawable/bg_chats"
     tools:context=".ui.userflow.ChatActivity">
-    
+
     <LinearLayout
+        android:background="@drawable/frame_1"
         android:id="@+id/lnHeader"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/_70sdp"
         android:orientation="horizontal"
-        android:background="@color/white"
+        android:paddingVertical="@dimen/_5sdp"
         >
-        <LinearLayout
-            android:layout_marginVertical="@dimen/_10sdp"
-            android:layout_marginHorizontal="@dimen/_15sdp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
         <ImageView
-            android:layout_width="@dimen/_15sdp"
-            android:layout_height="@dimen/_15sdp"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
             android:src="@drawable/img_arrow_back_"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:tint="@color/white"
             />
-        <com.mikhaellopez.circularimageview.CircularImageView
-            android:layout_width="@dimen/_45sdp"
-            android:layout_height="@dimen/_45sdp"
-            android:src="@drawable/img_user_profile"
-            android:layout_marginStart="@dimen/_55sdp"
-            />
-            <TextView
-                android:id="@+id/tv_login_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/josefinsans_semibold"
-                android:text="User Name"
-                android:layout_gravity="center_vertical"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_13ssp"
-                android:layout_marginStart="@dimen/_7sdp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_marginStart="@dimen/_8sdp"
+            android:id="@+id/clUserProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            >
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:layout_width="@dimen/_46sdp"
+                android:layout_height="@dimen/_46sdp"
+                android:src="@drawable/img_user_profile"
+                android:id="@+id/img_profile"
+                app:layout_constraintBaseline_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_gravity="center_vertical"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cindy M "
+                android:textColor="@color/white"
+                android:textSize="@dimen/_15ssp"
+                android:fontFamily="@font/josefinsans_bold"
+                android:id="@+id/tvUserName"
+                />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                >
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🌞🌛❤😍🤦‍♀️🎶🎂"
+                    android:textColor="@color/active_green"
+                    android:textSize="@dimen/_10ssp"
+                    android:layout_gravity="center_vertical"
+                    android:fontFamily="@font/josefinsans_regular"
+                    />
+            </LinearLayout>
         </LinearLayout>
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:layout_gravity="center_vertical"-->
+<!--            android:gravity="end"-->
+<!--            >-->
+<!--            <ImageView-->
+<!--                android:layout_width="@dimen/_20sdp"-->
+<!--                android:layout_height="@dimen/_20sdp"-->
+<!--                android:layout_gravity="center_vertical"-->
+<!--                android:src="@drawable/img_red_call"-->
+<!--                />-->
+<!--            <ImageView-->
+<!--                android:layout_width="@dimen/_20sdp"-->
+<!--                android:layout_height="@dimen/_20sdp"-->
+<!--                android:layout_gravity="center_vertical"-->
+<!--                android:src="@drawable/img_video_call"-->
+<!--                android:layout_marginHorizontal="@dimen/_15sdp"-->
+<!--                />-->
+<!--            <ImageView-->
+<!--                android:layout_width="@dimen/_4sdp"-->
+<!--                android:layout_height="@dimen/_20sdp"-->
+<!--                android:src="@drawable/img_more_vert"-->
+<!--                android:layout_gravity="center_vertical"-->
+<!--                android:id="@+id/options"-->
+<!--                />-->
+
+<!--        </LinearLayout>-->
+
     </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_below="@id/lnHeader"
@@ -67,12 +130,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/gray"
         android:layout_alignParentBottom="true"
         >
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/_10sdp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_10sdp"
@@ -88,7 +149,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/_10sdp"
-                    android:background="@drawable/bg_card_curve"
+                    android:background="@drawable/bg_white_curve"
                     android:fontFamily="@font/josefinsans_semibold"
                     android:hint="Just talk"
                     android:inputType="textMultiLine"
@@ -106,10 +167,12 @@
             </ScrollView>
 
             <ImageView
+                android:background="@drawable/circle_gradint"
                 android:id="@+id/img_send"
-                android:layout_width="@dimen/_34sdp"
-                android:layout_height="@dimen/_34sdp"
-                android:layout_gravity="bottom"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_gravity="center_vertical"
+                android:padding="@dimen/_6sdp"
                 android:src="@drawable/img_send" />
 
         </LinearLayout>
